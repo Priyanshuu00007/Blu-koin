@@ -1,0 +1,21 @@
+{
+  "name": "blue-carbon-platform",
+  "version": "1.0.0",
+  "description": "Blue Carbon Credits Trading Platform",
+  "main": "index.js",
+  "scripts": {
+    "dev": "live-server --port=3000 --open=landing-page.html",
+    "start": "live-server --port=3000 --open=landing-page.html"
+  },
+  "keywords": [
+    "carbon-credits",
+    "blue-carbon",
+    "trading",
+    "blockchain"
+  ],
+  "author": "Blue Carbon Team",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
