@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blue Carbon - Buyer Dashboard</title>
+    <style>
+        @import url(https://fonts.googleapis.com/css2?family=Lato&display=swap);
+        @import url(https://fonts.googleapis.com/css2?family=Open+Sans&display=swap);
+        @import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined);
+    </style>
+</head>
+<body>
+<div id="webcrumbs">
+    <div class="min-h-screen bg-gradient-to-br from-[#ECFDF5] to-[#F0F9FF] font-sans">
+        <!-- Sidebar -->
+        <aside class="fixed top-0 left-0 z-10 h-full w-64 bg-white/80 backdrop-blur-md border-r border-slate-200 transition-all duration-300 transform lg:translate-x-0 -translate-x-full shadow-xl">
+            <div class="p-4 border-b border-slate-200">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-r from-[#00C2A8] to-[#3B82F6] flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                        </svg>
+                    </div>
+                    <h1 class="ml-3 font-bold text-slate-800 text-xl">Blue Carbon</h1>
+                </div>
+            </div>
+            
+            <nav class="p-4">
+                <ul class="space-y-2">
+                    <li><a href="dashboard.html" class="flex items-center p-2 rounded-lg text-slate-800 hover:bg-slate-100 transition-all group">
+                        <span class="material-symbols-outlined mr-3 text-slate-600 group-hover:text-[#00C2A8]">dashboard</span>
+                        <span>Dashboard</span>
+                    </a></li>
+                    <li><a href="marketplace.html" class="flex items-center p-2 rounded-lg text-slate-800 hover:bg-slate-100 transition-all group">
+                        <span class="material-symbols-outlined mr-3 text-slate-600 group-hover:text-[#00C2A8]">shopping_cart</span>
+                        <span>Marketplace</span>
+                    </a></li>
+                    <li><a href="#" class="flex items-center p-2 rounded-lg text-slate-800 hover:bg-slate-100 transition-all group">
+                        <span class="material-symbols-outlined mr-3 text-slate-600 group-hover:text-[#00C2A8]">history</span>
+                        <span>Purchase History</span>
+                    </a></li>
+                    <li><a href="#" class="flex items-center p-2 rounded-lg text-slate-800 hover:bg-slate-100 transition-all group">
+                        <span class="material-symbols-outlined mr-3 text-slate-600 group-hover:text-[#00C2A8]">analytics</span>
+                        <span>Buyer Insights</span>
+                    </a></li>
+                    <li><a href="#" class="flex items-center p-2 rounded-lg text-slate-800 hover:bg-slate-100 transition-all group">
+                        <span class="material-symbols-outlined mr-3 text-slate-600 group-hover:text-[#00C2A8]">account_balance_wallet</span>
+                        <span>My Wallet</span>
+                    </a></li>
+                </ul>
+            </nav>
+            
+            <div class="absolute bottom-0 left-0 right-0 p-4">
+                <div class="flex items-center p-3 rounded-xl bg-gradient-to-r from-[#ECFDF5] to-[#EFF6FF]">
+                    <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm">
+                        <span class="material-symbols-outlined text-[#00C2A8]">shopping_bag</span>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-slate-800">Michael Johnson</p>
+                        <p class="text-xs text-slate-500">Corporate Buyer</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="lg:pl-64 pt-4 lg:pt-0 pb-20">
+            <!-- Header -->
+            <header class="hidden lg:block sticky top-0 bg-white/80 backdrop-blur-md border-b border-slate-200 px-8 py-4 z-10">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center">
+                        <h2 class="text-2xl font-bold text-slate-800">Buyer Dashboard</h2>
+                        <p class="ml-4 text-slate-600">Explore verified projects and purchase carbon credits</p>
+                        <div class="ml-8 flex items-center bg-slate-100 rounded-lg p-1">
+                            <button class="px-4 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-slate-800" onclick="switchRole('developer')">Project Developer</button>
+                            <button class="px-4 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-slate-800" onclick="switchRole('verifier')">Verifier</button>
+                            <button class="px-4 py-2 rounded-md bg-white text-sm font-medium shadow-sm">Buyer</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <button class="p-2 rounded-full hover:bg-slate-100 mr-2">
+                            <span class="material-symbols-outlined">search</span>
+                        </button>
+                        <div class="relative">
+                            <button class="p-2 rounded-full hover:bg-slate-100 mr-2">
+                                <span class="material-symbols-outlined">notifications</span>
+                                <span class="absolute top-1 right-1 w-2 h-2 bg-[#FF7EB3] rounded-full"></span>
+                            </button>
+                        </div>
+                        <button class="p-2 rounded-full hover:bg-slate-100 mr-4">
+                            <span class="material-symbols-outlined">help</span>
+                        </button>
+                        <div class="h-8 w-8 rounded-full bg-gradient-to-r from-[#00C2A8] to-[#3B82F6] flex items-center justify-center text-white text-sm font-bold">MJ</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="px-4 md:px-8 py-6">
+                <!-- KPI Cards -->
+                <div class="mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow border border-slate-200 group hover:border-[#00C2A8]">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-sm font-medium text-slate-500">Total Credits Purchased</h3>
+                                <span class="p-2 bg-[#ECFDF5] rounded-full text-[#16A34A] group-hover:bg-[#16A34A] group-hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined text-lg">shopping_cart</span>
+                                </span>
+                            </div>
+                            <p class="text-3xl font-bold text-slate-800">2,450</p>
+                            <p class="text-sm font-medium text-[#16A34A] flex items-center mt-2">
+                                <span class="material-symbols-outlined text-sm mr-1">arrow_upward</span>
+                                15% this month
+                            </p>
+                        </div>
+
+                        <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow border border-slate-200 group hover:border-[#00C2A8]">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-sm font-medium text-slate-500">Available Credits</h3>
+                                <span class="p-2 bg-[#EFF6FF] rounded-full text-[#3B82F6] group-hover:bg-[#3B82F6] group-hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined text-lg">inventory</span>
+                                </span>
+                            </div>
+                            <p class="text-3xl font-bold text-slate-800">1.2M</p>
+                            <p class="text-sm font-medium text-[#3B82F6] flex items-center mt-2">
+                                <span class="material-symbols-outlined text-sm mr-1">trending_up</span>
+                                Across 47 projects
+                            </p>
+                        </div>
+
+                        <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow border border-slate-200 group hover:border-[#00C2A8]">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-sm font-medium text-slate-500">Total Spent (USD)</h3>
+                                <span class="p-2 bg-[#FEF2F2] rounded-full text-[#FF7EB3] group-hover:bg-[#FF7EB3] group-hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined text-lg">payments</span>
+                                </span>
+                            </div>
+                            <p class="text-3xl font-bold text-slate-800">$61,250</p>
+                            <p class="text-sm font-medium text-[#FF7EB3] flex items-center mt-2">
+                                <span class="material-symbols-outlined text-sm mr-1">arrow_upward</span>
+                                8% this month
+                            </p>
+                        </div>
+
+                        <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow border border-slate-200 group hover:border-[#00C2A8]">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-sm font-medium text-slate-500">Projects Supported</h3>
+                                <span class="p-2 bg-[#F8FAFC] rounded-full text-[#64748B] group-hover:bg-[#64748B] group-hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined text-lg">landscape</span>
+                                </span>
+                            </div>
+                            <p class="text-3xl font-bold text-slate-800">12</p>
+                            <p class="text-sm font-medium text-[#64748B] flex items-center mt-2">
+                                <span class="material-symbols-outlined text-sm mr-1">arrow_upward</span>
+                                3 new this month
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Marketplace Section -->
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-slate-800">Marketplace</h2>
+                        <div class="flex space-x-2">
+                            <button class="px-4 py-2 bg-gradient-to-r from-[#00C2A8] to-[#3B82F6] text-white font-medium rounded-lg hover:shadow-md transform hover:translate-y-[-1px] transition-all flex items-center">
+                                <span class="material-symbols-outlined mr-2">filter_list</span>
+                                Filters
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Search and Filters -->
+                    <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div class="relative">
+                                <span class="material-symbols-outlined absolute left-3 top-2 text-slate-400">search</span>
+                                <input type="text" placeholder="Search projects..." class="pl-10 pr-4 py-2 w-full rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#00C2A8]/50 focus:border-[#00C2A8] text-sm" id="searchInput">
+                            </div>
+                            <select class="px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00C2A8]/50 text-sm" id="ecosystemFilter">
+                                <option value="">All Ecosystems</option>
+                                <option value="mangrove">Mangrove</option>
+                                <option value="seagrass">Seagrass</option>
+                                <option value="saltmarsh">Salt Marsh</option>
+                                <option value="wetland">Wetland</option>
+                            </select>
+                            <select class="px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00C2A8]/50 text-sm" id="locationFilter">
+                                <option value="">All Locations</option>
+                                <option value="asia">Asia</option>
+                                <option value="americas">Americas</option>
+                                <option value="europe">Europe</option>
+                                <option value="africa">Africa</option>
+                            </select>
+                            <select class="px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00C2A8]/50 text-sm" id="priceFilter">
+                                <option value="">All Prices</option>
+                                <option value="0-20">$0 - $20</option>
+                                <option value="20-50">$20 - $50</option>
+                                <option value="50-100">$50 - $100</option>
+                                <option value="100+">$100+</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Projects Table -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <table class="w-full">
+                            <thead class="bg-slate-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Project</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Ecosystem</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Location</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Available Credits</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Price per Credit</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 bg-white" id="projectsTable">
+                                <!-- Projects will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Purchase History -->
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-slate-800">Purchase History</h2>
+                        <button class="px-4 py-2 bg-slate-100 text-slate-700 font-medium rounded-lg hover:bg-slate-200 transition-all flex items-center">
+                            <span class="material-symbols-outlined mr-2">download</span>
+                            Export
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <table class="w-full">
+                            <thead class="bg-slate-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Project Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Credits Purchased</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Total Amount</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Purchase Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 bg-white" id="purchaseHistoryTable">
+                                <!-- Purchase history will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Buyer Insights -->
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-slate-800">Credits Purchased Over Time</h2>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 text-xs font-medium rounded-md bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors">3M</button>
+                            <button class="px-3 py-1 text-xs font-medium rounded-md bg-[#00C2A8] text-white">6M</button>
+                            <button class="px-3 py-1 text-xs font-medium rounded-md bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors">1Y</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                        <div class="h-64 w-full">
+                            <div class="h-full w-full bg-gradient-to-b from-[#ECFDF5]/30 to-transparent rounded-lg flex items-end relative">
+                                <div class="absolute top-0 left-0 right-0 h-[1px] bg-[#00C2A8]/20"></div>
+                                <div class="absolute top-1/4 left-0 right-0 h-[1px] bg-[#00C2A8]/20"></div>
+                                <div class="absolute top-1/2 left-0 right-0 h-[1px] bg-[#00C2A8]/20"></div>
+                                <div class="absolute top-3/4 left-0 right-0 h-[1px] bg-[#00C2A8]/20"></div>
+                                <div class="w-1/12 h-[20%] bg-[#00C2A8]/70 rounded-t"></div>
+                                <div class="w-1/12 h-[35%] bg-[#00C2A8]/70 rounded-t"></div>
+                                <div class="w-1/12 h-[28%] bg-[#00C2A8]/70 rounded-t"></div>
+                                <div class="w-1/12 h-[45%] bg-[#00C2A8]/70 rounded-t"></div>
+                                <div class="w-1/12 h-[38%] bg-[#00C2A8]/70 rounded-t"></div>
+                                <div class="w-1/12 h-[55%] bg-[#00C2A8]/70 rounded-t"></div>
+                                <div class="w-1/12 h-[50%] bg-[#00C2A8]/70 rounded-t"></div>
+                                <div class="w-1/12 h-[42%] bg-[#00C2A8]/70 rounded-t"></div>
+                                <div class="w-1/12 h-[65%] bg-[#00C2A8]/70 rounded-t"></div>
+                                <div class="w-1/12 h-[70%] bg-[#00C2A8]/70 rounded-t"></div>
+                                <div class="w-1/12 h-[60%] bg-[#00C2A8]/70 rounded-t"></div>
+                                <div class="w-1/12 h-[75%] bg-[#00C2A8]/70 rounded-t"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Purchase Modal -->
+<div id="purchaseModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-semibold text-slate-800">Purchase Carbon Credits</h3>
+                <button onclick="closePurchaseModal()" class="p-2 rounded-lg hover:bg-slate-100">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <!-- Step 1: Select Credits -->
+            <div id="step1" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Number of Credits</label>
+                    <input type="number" id="creditAmount" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00C2A8]/50" placeholder="Enter number of credits" min="1">
+                </div>
+                <div class="p-4 bg-slate-50 rounded-lg">
+                    <p class="text-sm text-slate-600">Price per credit: <span id="creditPrice">$25.00</span></p>
+                    <p class="text-lg font-semibold text-slate-800 mt-2">Total: <span id="totalPrice">$0.00</span></p>
+                </div>
+                <button onclick="nextStep()" class="w-full px-4 py-2 bg-[#00C2A8] text-white rounded-lg hover:bg-[#00A896] transition-colors">
+                    Continue to Payment
+                </button>
+            </div>
+
+            <!-- Step 2: Payment Info -->
+            <div id="step2" class="space-y-4 hidden">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Card Number</label>
+                    <input type="text" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00C2A8]/50" placeholder="1234 5678 9012 3456">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Expiry Date</label>
+                        <input type="text" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00C2A8]/50" placeholder="MM/YY">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">CVV</label>
+                        <input type="text" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00C2A8]/50" placeholder="123">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Cardholder Name</label>
+                    <input type="text" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00C2A8]/50" placeholder="John Doe">
+                </div>
+                <div class="flex space-x-3">
+                    <button onclick="prevStep()" class="flex-1 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors">
+                        Back
+                    </button>
+                    <button onclick="nextStep()" class="flex-1 px-4 py-2 bg-[#00C2A8] text-white rounded-lg hover:bg-[#00A896] transition-colors">
+                        Continue
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Confirmation -->
+            <div id="step3" class="space-y-4 hidden">
+                <div class="p-4 bg-green-50 rounded-lg">
+                    <h4 class="font-semibold text-green-800 mb-2">Purchase Summary</h4>
+                    <p class="text-sm text-green-700">Project: <span id="confirmProject">Sundarbans Mangrove</span></p>
+                    <p class="text-sm text-green-700">Credits: <span id="confirmCredits">0</span></p>
+                    <p class="text-sm text-green-700">Total: <span id="confirmTotal">$0.00</span></p>
+                </div>
+                <div class="flex space-x-3">
+                    <button onclick="prevStep()" class="flex-1 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors">
+                        Back
+                    </button>
+                    <button onclick="confirmPurchase()" class="flex-1 px-4 py-2 bg-[#16A34A] text-white rounded-lg hover:bg-[#15803D] transition-colors">
+                        Confirm Purchase
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Project Details Modal -->
+<div id="projectModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-semibold text-slate-800">Project Details</h3>
+                <button onclick="closeProjectModal()" class="p-2 rounded-lg hover:bg-slate-100">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div id="projectDetails">
+                <!-- Project details will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    // Mock data
+    const mockProjects = [
+        {
+            id: 1,
+            name: "Sundarbans Mangrove Restoration",
+            ecosystem: "Mangrove",
+            location: "Bangladesh, Asia",
+            availableCredits: 50000,
+            pricePerCredit: 25.00,
+            description: "Large-scale mangrove restoration project focusing on carbon sequestration and biodiversity conservation."
+        },
+        {
+            id: 2,
+            name: "Great Barrier Seagrass",
+            ecosystem: "Seagrass",
+            location: "Australia, Oceania",
+            availableCredits: 30000,
+            pricePerCredit: 30.00,
+            description: "Seagrass restoration project in the Great Barrier Reef region."
+        },
+        {
+            id: 3,
+            name: "Florida Wetlands Conservation",
+            ecosystem: "Wetland",
+            location: "Florida, USA",
+            availableCredits: 25000,
+            pricePerCredit: 22.00,
+            description: "Wetland conservation and restoration project in Florida."
+        }
+    ];
+
+    const mockPurchaseHistory = [
+        {
+            projectName: "Sundarbans Mangrove Restoration",
+            creditsPurchased: 100,
+            totalAmount: 2500.00,
+            purchaseDate: "2025-01-15",
+            status: "Completed"
+        },
+        {
+            projectName: "Great Barrier Seagrass",
+            creditsPurchased: 50,
+            totalAmount: 1500.00,
+            purchaseDate: "2025-01-10",
+            status: "Completed"
+        },
+        {
+            projectName: "Florida Wetlands Conservation",
+            creditsPurchased: 75,
+            totalAmount: 1650.00,
+            purchaseDate: "2025-01-05",
+            status: "Completed"
+        }
+    ];
+
+    let currentStep = 1;
+    let selectedProject = null;
+
+    // Initialize dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+        const isLoggedIn = localStorage.getItem('userLoggedIn');
+        if (!isLoggedIn) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        populateProjectsTable();
+        populatePurchaseHistory();
+        setupEventListeners();
+
+        // Add logout functionality
+        const logoutButton = document.createElement('button');
+        logoutButton.innerHTML = '<span class="material-symbols-outlined mr-2">logout</span>Logout';
+        logoutButton.className = 'px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors flex items-center';
+        logoutButton.onclick = function() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userRole');
+            window.location.href = 'welcome.html';
+        };
+
+        const headerActions = document.querySelector('header .flex.items-center');
+        if (headerActions) {
+            headerActions.appendChild(logoutButton);
+        }
+
+        // Add marketplace link functionality
+        setTimeout(() => {
+            const marketplaceLinks = document.querySelectorAll('a[href="marketplace.html"]');
+            marketplaceLinks.forEach(link => {
+                link.onclick = function(e) {
+                    e.preventDefault();
+                    console.log('Marketplace clicked from buyer dashboard!');
+                    window.location.href = 'marketplace.html';
+                };
+            });
+        }, 1000);
+    });
+
+    function populateProjectsTable() {
+        const tbody = document.getElementById('projectsTable');
+        tbody.innerHTML = '';
+
+        mockProjects.forEach(project => {
+            const row = document.createElement('tr');
+            row.className = 'hover:bg-slate-50 transition-colors';
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-md bg-[#ECFDF5] flex items-center justify-center text-[#16A34A] mr-3">
+                            <span class="material-symbols-outlined">landscape</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-slate-800">${project.name}</p>
+                            <p class="text-xs text-slate-500">ID: BCRA-${project.id.toString().padStart(4, '0')}</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">${project.ecosystem}</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">${project.location}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">${project.availableCredits.toLocaleString()}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">$${project.pricePerCredit.toFixed(2)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <div class="flex justify-end space-x-2">
+                        <button onclick="viewProject(${project.id})" class="p-1.5 rounded-md text-slate-600 hover:bg-slate-100">
+                            <span class="material-symbols-outlined text-sm">visibility</span>
+                        </button>
+                        <button onclick="purchaseCredits(${project.id})" class="p-1.5 rounded-md text-[#00C2A8] hover:bg-[#ECFDF5]">
+                            <span class="material-symbols-outlined text-sm">shopping_cart</span>
+                        </button>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function populatePurchaseHistory() {
+        const tbody = document.getElementById('purchaseHistoryTable');
+        tbody.innerHTML = '';
+
+        mockPurchaseHistory.forEach(purchase => {
+            const row = document.createElement('tr');
+            row.className = 'hover:bg-slate-50 transition-colors';
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">${purchase.projectName}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">${purchase.creditsPurchased}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">$${purchase.totalAmount.toFixed(2)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">${purchase.purchaseDate}</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">${purchase.status}</span>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function setupEventListeners() {
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', filterProjects);
+        document.getElementById('ecosystemFilter').addEventListener('change', filterProjects);
+        document.getElementById('locationFilter').addEventListener('change', filterProjects);
+        document.getElementById('priceFilter').addEventListener('change', filterProjects);
+
+        // Credit amount calculation
+        document.getElementById('creditAmount').addEventListener('input', calculateTotal);
+    }
+
+    function filterProjects() {
+        // This would filter the projects table based on search and filter inputs
+        console.log('Filtering projects...');
+    }
+
+    function viewProject(projectId) {
+        const project = mockProjects.find(p => p.id === projectId);
+        if (project) {
+            document.getElementById('projectDetails').innerHTML = `
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="font-semibold text-slate-800 mb-2">${project.name}</h4>
+                        <p class="text-slate-600">${project.description}</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-slate-500">Ecosystem</p>
+                            <p class="font-medium text-slate-800">${project.ecosystem}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-500">Location</p>
+                            <p class="font-medium text-slate-800">${project.location}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-500">Available Credits</p>
+                            <p class="font-medium text-slate-800">${project.availableCredits.toLocaleString()}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-500">Price per Credit</p>
+                            <p class="font-medium text-slate-800">$${project.pricePerCredit.toFixed(2)}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('projectModal').classList.remove('hidden');
+        }
+    }
+
+    function purchaseCredits(projectId) {
+        selectedProject = mockProjects.find(p => p.id === projectId);
+        if (selectedProject) {
+            document.getElementById('creditPrice').textContent = `$${selectedProject.pricePerCredit.toFixed(2)}`;
+            document.getElementById('confirmProject').textContent = selectedProject.name;
+            currentStep = 1;
+            showStep(1);
+            document.getElementById('purchaseModal').classList.remove('hidden');
+        }
+    }
+
+    function calculateTotal() {
+        const amount = parseInt(document.getElementById('creditAmount').value) || 0;
+        const price = selectedProject ? selectedProject.pricePerCredit : 0;
+        const total = amount * price;
+        document.getElementById('totalPrice').textContent = `$${total.toFixed(2)}`;
+        document.getElementById('confirmCredits').textContent = amount;
+        document.getElementById('confirmTotal').textContent = `$${total.toFixed(2)}`;
+    }
+
+    function nextStep() {
+        if (currentStep < 3) {
+            currentStep++;
+            showStep(currentStep);
+        }
+    }
+
+    function prevStep() {
+        if (currentStep > 1) {
+            currentStep--;
+            showStep(currentStep);
+        }
+    }
+
+    function showStep(step) {
+        document.getElementById('step1').classList.toggle('hidden', step !== 1);
+        document.getElementById('step2').classList.toggle('hidden', step !== 2);
+        document.getElementById('step3').classList.toggle('hidden', step !== 3);
+    }
+
+    function confirmPurchase() {
+        // Mock purchase confirmation
+        alert('Purchase completed successfully!');
+        closePurchaseModal();
+    }
+
+    function closePurchaseModal() {
+        document.getElementById('purchaseModal').classList.add('hidden');
+        currentStep = 1;
+        showStep(1);
+    }
+
+    function closeProjectModal() {
+        document.getElementById('projectModal').classList.add('hidden');
+    }
+
+    function switchRole(role) {
+        localStorage.setItem('userRole', role);
+        if (role === 'developer') {
+            window.location.href = 'dashboard.html';
+        } else if (role === 'verifier') {
+            window.location.href = 'verifier-dashboard.html';
+        }
+    }
+
+    // Global click handler for marketplace links (backup)
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('a[href="marketplace.html"]')) {
+            e.preventDefault();
+            console.log('Marketplace clicked via global handler from buyer dashboard');
+            window.location.href = 'marketplace.html';
+        }
+    });
+
+    // Tailwind config
+    tailwind.config = {
+        content: ["./src/**/*.{html,js}"],
+        theme: {
+            extend: {
+                colors: {
+                    primary: {
+                        50: '#f0f9ff',
+                        500: '#00C2A8',
+                        600: '#3B82F6'
+                    }
+                }
+            }
+        }
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blue Carbon - Verifier Dashboard</title>
+    <style>
+        @import url(https://fonts.googleapis.com/css2?family=Lato&display=swap);
+        @import url(https://fonts.googleapis.com/css2?family=Open+Sans&display=swap);
+        @import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined);
+    </style>
+</head>
+<body>
+<div id="webcrumbs">
+    <div class="min-h-screen bg-gradient-to-br from-[#ECFDF5] to-[#F0F9FF] font-sans">
+        <!-- Sidebar -->
+        <aside class="fixed top-0 left-0 z-10 h-full w-64 bg-white/80 backdrop-blur-md border-r border-slate-200 transition-all duration-300 transform lg:translate-x-0 -translate-x-full shadow-xl">
+            <div class="p-4 border-b border-slate-200">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-r from-[#00C2A8] to-[#3B82F6] flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                        </svg>
+                    </div>
+                    <h1 class="ml-3 font-bold text-slate-800 text-xl">Blue Carbon</h1>
+                </div>
+            </div>
+            
+            <nav class="p-4">
+                <ul class="space-y-2">
+                    <li><a href="dashboard.html" class="flex items-center p-2 rounded-lg text-slate-800 hover:bg-slate-100 transition-all group">
+                        <span class="material-symbols-outlined mr-3 text-slate-600 group-hover:text-[#00C2A8]">dashboard</span>
+                        <span>Dashboard</span>
+                    </a></li>
+                    <li><a href="#" class="flex items-center p-2 rounded-lg text-slate-800 hover:bg-slate-100 transition-all group">
+                        <span class="material-symbols-outlined mr-3 text-slate-600 group-hover:text-[#00C2A8]">verified</span>
+                        <span>Verification Queue</span>
+                    </a></li>
+                    <li><a href="#" class="flex items-center p-2 rounded-lg text-slate-800 hover:bg-slate-100 transition-all group">
+                        <span class="material-symbols-outlined mr-3 text-slate-600 group-hover:text-[#00C2A8]">assignment</span>
+                        <span>My Verifications</span>
+                    </a></li>
+                    <li><a href="#" class="flex items-center p-2 rounded-lg text-slate-800 hover:bg-slate-100 transition-all group">
+                        <span class="material-symbols-outlined mr-3 text-slate-600 group-hover:text-[#00C2A8]">analytics</span>
+                        <span>Verification Analytics</span>
+                    </a></li>
+                    <li><a href="marketplace.html" class="flex items-center p-2 rounded-lg text-slate-800 hover:bg-slate-100 transition-all group">
+                        <span class="material-symbols-outlined mr-3 text-slate-600 group-hover:text-[#00C2A8]">shopping_cart</span>
+                        <span>Marketplace</span>
+                    </a></li>
+                    <li><a href="#" class="flex items-center p-2 rounded-lg text-slate-800 hover:bg-slate-100 transition-all group">
+                        <span class="material-symbols-outlined mr-3 text-slate-600 group-hover:text-[#00C2A8]">settings</span>
+                        <span>Verification Settings</span>
+                    </a></li>
+                </ul>
+            </nav>
+            
+            <div class="absolute bottom-0 left-0 right-0 p-4">
+                <div class="flex items-center p-3 rounded-xl bg-gradient-to-r from-[#ECFDF5] to-[#EFF6FF]">
+                    <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm">
+                        <span class="material-symbols-outlined text-[#00C2A8]">verified_user</span>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-slate-800">Dr. Sarah Chen</p>
+                        <p class="text-xs text-slate-500">Senior Verifier</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="lg:pl-64 pt-4 lg:pt-0 pb-20">
+            <!-- Header -->
+            <header class="hidden lg:block sticky top-0 bg-white/80 backdrop-blur-md border-b border-slate-200 px-8 py-4 z-10">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center">
+                        <h2 class="text-2xl font-bold text-slate-800">Verifier Dashboard</h2>
+                        <div class="ml-8 flex items-center bg-slate-100 rounded-lg p-1">
+                            <button class="px-4 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-slate-800" onclick="switchRole('developer')">Project Developer</button>
+                            <button class="px-4 py-2 rounded-md bg-white text-sm font-medium shadow-sm">Verifier</button>
+                            <button class="px-4 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-slate-800" onclick="switchRole('buyer')">Buyer</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <button class="p-2 rounded-full hover:bg-slate-100 mr-2">
+                            <span class="material-symbols-outlined">search</span>
+                        </button>
+                        <div class="relative">
+                            <button class="p-2 rounded-full hover:bg-slate-100 mr-2">
+                                <span class="material-symbols-outlined">notifications</span>
+                                <span class="absolute top-1 right-1 w-2 h-2 bg-[#FF7EB3] rounded-full"></span>
+                            </button>
+                        </div>
+                        <button class="p-2 rounded-full hover:bg-slate-100 mr-4">
+                            <span class="material-symbols-outlined">help</span>
+                        </button>
+                        <div class="h-8 w-8 rounded-full bg-gradient-to-r from-[#00C2A8] to-[#3B82F6] flex items-center justify-center text-white text-sm font-bold">SC</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="px-4 md:px-8 py-6">
+                <!-- KPI Cards -->
+                <div class="mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow border border-slate-200 group hover:border-[#00C2A8]">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-sm font-medium text-slate-500">Pending Reviews</h3>
+                                <span class="p-2 bg-[#FEF2F2] rounded-full text-[#FF7EB3] group-hover:bg-[#FF7EB3] group-hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined text-lg">pending</span>
+                                </span>
+                            </div>
+                            <p class="text-3xl font-bold text-slate-800">23</p>
+                            <p class="text-sm font-medium text-[#FF7EB3] flex items-center mt-2">
+                                <span class="material-symbols-outlined text-sm mr-1">arrow_upward</span>
+                                5 new today
+                            </p>
+                        </div>
+
+                        <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow border border-slate-200 group hover:border-[#00C2A8]">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-sm font-medium text-slate-500">Verified This Month</h3>
+                                <span class="p-2 bg-[#ECFDF5] rounded-full text-[#16A34A] group-hover:bg-[#16A34A] group-hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined text-lg">verified</span>
+                                </span>
+                            </div>
+                            <p class="text-3xl font-bold text-slate-800">47</p>
+                            <p class="text-sm font-medium text-[#16A34A] flex items-center mt-2">
+                                <span class="material-symbols-outlined text-sm mr-1">arrow_upward</span>
+                                18% increase
+                            </p>
+                        </div>
+
+                        <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow border border-slate-200 group hover:border-[#00C2A8]">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-sm font-medium text-slate-500">Average Review Time</h3>
+                                <span class="p-2 bg-[#EFF6FF] rounded-full text-[#3B82F6] group-hover:bg-[#3B82F6] group-hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined text-lg">schedule</span>
+                                </span>
+                            </div>
+                            <p class="text-3xl font-bold text-slate-800">3.2</p>
+                            <p class="text-sm font-medium text-[#3B82F6] flex items-center mt-2">
+                                <span class="material-symbols-outlined text-sm mr-1">arrow_downward</span>
+                                days
+                            </p>
+                        </div>
+
+                        <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow border border-slate-200 group hover:border-[#00C2A8]">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-sm font-medium text-slate-500">Verification Rate</h3>
+                                <span class="p-2 bg-[#F8FAFC] rounded-full text-[#64748B] group-hover:bg-[#64748B] group-hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined text-lg">trending_up</span>
+                                </span>
+                            </div>
+                            <p class="text-3xl font-bold text-slate-800">87%</p>
+                            <p class="text-sm font-medium text-[#64748B] flex items-center mt-2">
+                                <span class="material-symbols-outlined text-sm mr-1">arrow_upward</span>
+                                5% improvement
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Charts Section -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="font-medium text-slate-800">Verification Trends</h3>
+                                <div class="flex space-x-2">
+                                    <button class="px-3 py-1 text-xs font-medium rounded-md bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors">1M</button>
+                                    <button class="px-3 py-1 text-xs font-medium rounded-md bg-[#00C2A8] text-white">3M</button>
+                                    <button class="px-3 py-1 text-xs font-medium rounded-md bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors">6M</button>
+                                    <button class="px-3 py-1 text-xs font-medium rounded-md bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors">1Y</button>
+                                </div>
+                            </div>
+                            <div class="h-64 w-full">
+                                <div class="h-full w-full bg-gradient-to-b from-[#ECFDF5]/30 to-transparent rounded-lg flex items-end relative">
+                                    <div class="absolute top-0 left-0 right-0 h-[1px] bg-[#00C2A8]/20"></div>
+                                    <div class="absolute top-1/4 left-0 right-0 h-[1px] bg-[#00C2A8]/20"></div>
+                                    <div class="absolute top-1/2 left-0 right-0 h-[1px] bg-[#00C2A8]/20"></div>
+                                    <div class="absolute top-3/4 left-0 right-0 h-[1px] bg-[#00C2A8]/20"></div>
+                                    <div class="w-1/12 h-[25%] bg-[#00C2A8]/70 rounded-t"></div>
+                                    <div class="w-1/12 h-[40%] bg-[#00C2A8]/70 rounded-t"></div>
+                                    <div class="w-1/12 h-[35%] bg-[#00C2A8]/70 rounded-t"></div>
+                                    <div class="w-1/12 h-[55%] bg-[#00C2A8]/70 rounded-t"></div>
+                                    <div class="w-1/12 h-[45%] bg-[#00C2A8]/70 rounded-t"></div>
+                                    <div class="w-1/12 h-[65%] bg-[#00C2A8]/70 rounded-t"></div>
+                                    <div class="w-1/12 h-[60%] bg-[#00C2A8]/70 rounded-t"></div>
+                                    <div class="w-1/12 h-[42%] bg-[#00C2A8]/70 rounded-t"></div>
+                                    <div class="w-1/12 h-[68%] bg-[#00C2A8]/70 rounded-t"></div>
+                                    <div class="w-1/12 h-[80%] bg-[#00C2A8]/70 rounded-t"></div>
+                                    <div class="w-1/12 h-[75%] bg-[#00C2A8]/70 rounded-t"></div>
+                                    <div class="w-1/12 h-[85%] bg-[#00C2A8]/70 rounded-t"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="font-medium text-slate-800">Ecosystem Distribution</h3>
+                                <button class="p-1 rounded-md hover:bg-slate-100 text-slate-600">
+                                    <span class="material-symbols-outlined text-sm">more_horiz</span>
+                                </button>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 rounded-full bg-[#16A34A] mr-3"></div>
+                                        <span class="text-sm text-slate-600">Mangroves</span>
+                                    </div>
+                                    <span class="text-sm font-medium text-slate-800">45%</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 rounded-full bg-[#3B82F6] mr-3"></div>
+                                        <span class="text-sm text-slate-600">Seagrass</span>
+                                    </div>
+                                    <span class="text-sm font-medium text-slate-800">30%</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 rounded-full bg-[#00C2A8] mr-3"></div>
+                                        <span class="text-sm text-slate-600">Salt Marsh</span>
+                                    </div>
+                                    <span class="text-sm font-medium text-slate-800">15%</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 rounded-full bg-[#FF7EB3] mr-3"></div>
+                                        <span class="text-sm text-slate-600">Wetlands</span>
+                                    </div>
+                                    <span class="text-sm font-medium text-slate-800">10%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Verification Queue -->
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-slate-800">Verification Queue</h2>
+                        <div class="flex space-x-2">
+                            <button class="px-4 py-2 bg-gradient-to-r from-[#00C2A8] to-[#3B82F6] text-white font-medium rounded-lg hover:shadow-md transform hover:translate-y-[-1px] transition-all flex items-center">
+                                <span class="material-symbols-outlined mr-2">filter_list</span>
+                                Filter
+                            </button>
+                            <button class="px-4 py-2 bg-slate-100 text-slate-700 font-medium rounded-lg hover:bg-slate-200 transition-all flex items-center">
+                                <span class="material-symbols-outlined mr-2">download</span>
+                                Export
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="p-4 border-b border-slate-200 flex justify-between items-center">
+                            <div class="flex space-x-2">
+                                <button class="px-3 py-1 text-sm font-medium rounded-md bg-[#00C2A8] text-white">All</button>
+                                <button class="px-3 py-1 text-sm font-medium rounded-md bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors">Pending</button>
+                                <button class="px-3 py-1 text-sm font-medium rounded-md bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors">In Review</button>
+                                <button class="px-3 py-1 text-sm font-medium rounded-md bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors">Approved</button>
+                                <button class="px-3 py-1 text-sm font-medium rounded-md bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors">Rejected</button>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="relative mr-4">
+                                    <span class="material-symbols-outlined absolute left-3 top-2 text-slate-400">search</span>
+                                    <input type="text" placeholder="Search projects" class="pl-10 pr-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#00C2A8]/50 focus:border-[#00C2A8] text-sm"/>
+                                </div>
+                                <button class="p-2 rounded-md hover:bg-slate-100 text-slate-600">
+                                    <span class="material-symbols-outlined">sort</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <table class="w-full">
+                            <thead class="bg-slate-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Project</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Ecosystem</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Submitted</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Priority</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 bg-white">
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-md bg-[#ECFDF5] flex items-center justify-center text-[#16A34A] mr-3">
+                                                <span class="material-symbols-outlined">landscape</span>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-medium text-slate-800">Sundarbans Mangrove</p>
+                                                <p class="text-xs text-slate-500">ID: BCRA-1042</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Mangrove</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">2 days ago</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">High</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Pending</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <div class="flex justify-end space-x-2">
+                                            <button class="p-1.5 rounded-md text-slate-600 hover:bg-slate-100" onclick="viewProject('BCRA-1042')">
+                                                <span class="material-symbols-outlined text-sm">visibility</span>
+                                            </button>
+                                            <button class="p-1.5 rounded-md text-[#00C2A8] hover:bg-[#ECFDF5]" onclick="startVerification('BCRA-1042')">
+                                                <span class="material-symbols-outlined text-sm">play_arrow</span>
+                                            </button>
+                                            <button class="p-1.5 rounded-md text-slate-600 hover:bg-slate-100">
+                                                <span class="material-symbols-outlined text-sm">download</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-md bg-[#EFF6FF] flex items-center justify-center text-[#3B82F6] mr-3">
+                                                <span class="material-symbols-outlined">water</span>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-medium text-slate-800">Great Barrier Seagrass</p>
+                                                <p class="text-xs text-slate-500">ID: BCRA-0893</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Seagrass</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">1 day ago</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Medium</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">In Review</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <div class="flex justify-end space-x-2">
+                                            <button class="p-1.5 rounded-md text-slate-600 hover:bg-slate-100" onclick="viewProject('BCRA-0893')">
+                                                <span class="material-symbols-outlined text-sm">visibility</span>
+                                            </button>
+                                            <button class="p-1.5 rounded-md text-[#00C2A8] hover:bg-[#ECFDF5]" onclick="continueVerification('BCRA-0893')">
+                                                <span class="material-symbols-outlined text-sm">edit</span>
+                                            </button>
+                                            <button class="p-1.5 rounded-md text-slate-600 hover:bg-slate-100">
+                                                <span class="material-symbols-outlined text-sm">download</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-md bg-[#FEF2F2] flex items-center justify-center text-[#FF7EB3] mr-3">
+                                                <span class="material-symbols-outlined">landscape</span>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-medium text-slate-800">Florida Wetlands</p>
+                                                <p class="text-xs text-slate-500">ID: BCRA-1278</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-pink-100 text-pink-800">Wetlands</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">3 days ago</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Low</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Pending</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <div class="flex justify-end space-x-2">
+                                            <button class="p-1.5 rounded-md text-slate-600 hover:bg-slate-100" onclick="viewProject('BCRA-1278')">
+                                                <span class="material-symbols-outlined text-sm">visibility</span>
+                                            </button>
+                                            <button class="p-1.5 rounded-md text-[#00C2A8] hover:bg-[#ECFDF5]" onclick="startVerification('BCRA-1278')">
+                                                <span class="material-symbols-outlined text-sm">play_arrow</span>
+                                            </button>
+                                            <button class="p-1.5 rounded-md text-slate-600 hover:bg-slate-100">
+                                                <span class="material-symbols-outlined text-sm">download</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    // Verifier Dashboard functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if user is logged in
+        const isLoggedIn = localStorage.getItem('userLoggedIn');
+        if (!isLoggedIn) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // Add logout functionality
+        const logoutButton = document.createElement('button');
+        logoutButton.innerHTML = '<span class="material-symbols-outlined mr-2">logout</span>Logout';
+        logoutButton.className = 'px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors flex items-center';
+        logoutButton.onclick = function() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userRole');
+            window.location.href = 'welcome.html';
+        };
+
+        // Add home button
+        const homeButton = document.createElement('button');
+        homeButton.innerHTML = '<span class="material-symbols-outlined mr-2">home</span>Home';
+        homeButton.className = 'px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center mr-2';
+        homeButton.onclick = function() {
+            window.location.href = 'welcome.html';
+        };
+
+        const headerActions = document.querySelector('header .flex.items-center');
+        if (headerActions) {
+            headerActions.appendChild(homeButton);
+            headerActions.appendChild(logoutButton);
+        }
+
+        // Add robust role switching functionality
+        setTimeout(() => {
+            const allButtons = document.querySelectorAll('button');
+            console.log('Verifier Dashboard - Found buttons:', allButtons.length);
+            
+            allButtons.forEach((button, index) => {
+                console.log(`Verifier Button ${index}:`, button.textContent.trim());
+                if (button.textContent.includes('Project Developer')) {
+                    button.onclick = function(e) {
+                        e.preventDefault();
+                        console.log('Project Developer button clicked from verifier!');
+                        window.location.href = 'dashboard.html';
+                    };
+                    button.style.cursor = 'pointer';
+                } else if (button.textContent.includes('Buyer')) {
+                    button.onclick = function(e) {
+                        e.preventDefault();
+                        console.log('Buyer button clicked from verifier!');
+                        window.location.href = 'buyer-dashboard.html';
+                    };
+                    button.style.cursor = 'pointer';
+                }
+            });
+        }, 1000);
+
+        // Add marketplace link functionality
+        setTimeout(() => {
+            const marketplaceLinks = document.querySelectorAll('a[href="marketplace.html"]');
+            marketplaceLinks.forEach(link => {
+                link.onclick = function(e) {
+                    e.preventDefault();
+                    console.log('Marketplace clicked from verifier dashboard!');
+                    window.location.href = 'marketplace.html';
+                };
+            });
+        }, 1000);
+    });
+
+    // Role switching functionality
+    function switchRole(role) {
+        localStorage.setItem('userRole', role);
+        if (role === 'developer') {
+            window.location.href = 'dashboard.html';
+        } else if (role === 'buyer') {
+            window.location.href = 'buyer-dashboard.html';
+        }
+    }
+
+    // Verification functions
+    function viewProject(projectId) {
+        alert(`Viewing project details for ${projectId}`);
+        // Future: Open project detail modal
+    }
+
+    function startVerification(projectId) {
+        window.location.href = 'verification-form.html';
+    }
+
+    function continueVerification(projectId) {
+        window.location.href = 'verification-form.html';
+    }
+
+    // Global click handler for role buttons and marketplace links (backup)
+    document.addEventListener('click', function(e) {
+        if (e.target.textContent && e.target.textContent.includes('Project Developer')) {
+            e.preventDefault();
+            console.log('Project Developer clicked via global handler from verifier');
+            window.location.href = 'dashboard.html';
+        } else if (e.target.textContent && e.target.textContent.includes('Buyer')) {
+            e.preventDefault();
+            console.log('Buyer clicked via global handler from verifier');
+            window.location.href = 'buyer-dashboard.html';
+        } else if (e.target.closest('a[href="marketplace.html"]')) {
+            e.preventDefault();
+            console.log('Marketplace clicked via global handler from verifier dashboard');
+            window.location.href = 'marketplace.html';
+        }
+    });
+
+    // Tailwind config
+    tailwind.config = {
+        content: ["./src/**/*.{html,js}"],
+        theme: {
+            extend: {
+                colors: {
+                    primary: {
+                        50: '#f0f9ff',
+                        500: '#00C2A8',
+                        600: '#3B82F6'
+                    }
+                }
+            }
+        }
+    };
+</script>
+</body>
+</html>
