@@ -986,85 +986,7 @@
 
 
 
-    function populateProjectsTable() {
-
-        const tbody = document.getElementById('projectsTable');
-
-        tbody.innerHTML = '';
-
-
-
-        mockProjects.forEach(project => {
-
-            const row = document.createElement('tr');
-
-            row.className = 'hover:bg-slate-50 transition-colors';
-
-            row.innerHTML = `
-
-                <td class="px-6 py-4 whitespace-nowrap">
-
-                    <div class="flex items-center">
-
-                        <div class="w-8 h-8 rounded-md bg-[#ECFDF5] flex items-center justify-center text-[#16A34A] mr-3">
-
-                            <span class="material-symbols-outlined">landscape</span>
-
-                        </div>
-
-                        <div>
-
-                            <p class="text-sm font-medium text-slate-800">${project.name}</p>
-
-                            <p class="text-xs text-slate-500">ID: BCRA-${project.id.toString().padStart(4, '0')}</p>
-
-                        </div>
-
-                    </div>
-
-                </td>
-
-                <td class="px-6 py-4 whitespace-nowrap">
-
-                    <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">${project.ecosystem}</span>
-
-                </td>
-
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">${project.location}</td>
-
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">${project.availableCredits.toLocaleString()}</td>
-
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">₹${project.pricePerCredit.toFixed(2)}</td>
-
-                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-
-                    <div class="flex justify-end space-x-2">
-
-                        <button onclick="viewProject(${project.id})" class="p-1.5 rounded-md text-slate-600 hover:bg-slate-100">
-
-                            <span class="material-symbols-outlined text-sm">visibility</span>
-
-                        </button>
-
-                        <button onclick="purchaseCredits(${project.id})" class="p-1.5 rounded-md text-[#00C2A8] hover:bg-[#ECFDF5]">
-
-                            <span class="material-symbols-outlined text-sm">shopping_cart</span>
-
-                        </button>
-
-                    </div>
-
-                </td>
-
-            `;
-
-            tbody.appendChild(row);
-
-        });
-
-    }
-
-
+    function getStoredPurchases(){ try { return JSON.parse(localStorage.getItem('purchaseHistory')||'[]'); } catch { return []; } }
 
     function populatePurchaseHistory() {
 
@@ -1074,7 +996,21 @@
 
 
 
-        mockPurchaseHistory.forEach(purchase => {
+        const local = getStoredPurchases();
+
+        let recent = local;
+
+        if (!recent || recent.length === 0) {
+            recent = [{
+                projectName: 'Andaman Seagrass Starter Pack',
+                creditsPurchased: 40,
+                totalPaid: 1200.00,
+                date: new Date().toISOString().slice(0,10),
+                status: 'Completed'
+            }];
+        }
+
+        recent.forEach(purchase => {
 
             const row = document.createElement('tr');
 
@@ -1086,16 +1022,74 @@
 
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">${purchase.creditsPurchased}</td>
 
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">₹${purchase.totalAmount.toFixed(2)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">₹${Number(purchase.totalPaid||0).toFixed(2)}</td>
 
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">${purchase.purchaseDate}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">${purchase.date}</td>
 
                 <td class="px-6 py-4 whitespace-nowrap">
 
-                    <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">${purchase.status}</span>
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">${purchase.status||'Completed'}</span>
 
                 </td>
 
+            `;
+
+            tbody.appendChild(row);
+
+        });
+
+        // If a new purchase just happened, show a quick toast
+        const just = localStorage.getItem('purchaseJustMade');
+        if (just) {
+            localStorage.removeItem('purchaseJustMade');
+            console.log(`New purchase recorded: ${just}`);
+        }
+
+    }
+
+
+
+    function populateProjectsTable() {
+
+        const tbody = document.getElementById('projectsTable');
+
+        if (!tbody) return;
+
+        tbody.innerHTML = '';
+
+        mockProjects.forEach(project => {
+
+            const row = document.createElement('tr');
+
+            row.className = 'hover:bg-slate-50 transition-colors';
+
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-md bg-[#ECFDF5] flex items-center justify-center text-[#16A34A] mr-3">
+                            <span class="material-symbols-outlined">landscape</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-slate-800">${project.name}</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">${project.ecosystem}</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">${project.location}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">${project.availableCredits.toLocaleString()}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">₹${project.pricePerCredit.toFixed(2)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <div class="flex justify-end space-x-2">
+                        <button class="p-1.5 rounded-md text-slate-600 hover:bg-slate-100" onclick="viewProject(${project.id})">
+                            <span class="material-symbols-outlined text-sm">visibility</span>
+                        </button>
+                        <button class="p-1.5 rounded-md text-[#00C2A8] hover:bg-[#ECFDF5]" onclick="purchaseCredits(${project.id})">
+                            <span class="material-symbols-outlined text-sm">shopping_cart</span>
+                        </button>
+                    </div>
+                </td>
             `;
 
             tbody.appendChild(row);

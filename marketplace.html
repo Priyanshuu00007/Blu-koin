@@ -447,6 +447,15 @@
         }
     ];
 
+    const PURCHASES_KEY = 'purchaseHistory';
+
+    function getStoredPurchases() {
+        try { return JSON.parse(localStorage.getItem(PURCHASES_KEY) || '[]'); } catch { return []; }
+    }
+    function saveStoredPurchases(arr) {
+        localStorage.setItem(PURCHASES_KEY, JSON.stringify(arr));
+    }
+
     let currentStep = 1;
     let selectedProject = null;
 
@@ -527,16 +536,19 @@
         const tbody = document.getElementById('recentPurchasesTable');
         tbody.innerHTML = '';
 
-        mockRecentPurchases.forEach(purchase => {
+        const stored = getStoredPurchases();
+        const combined = [...stored, ...mockRecentPurchases];
+
+        combined.forEach(purchase => {
             const row = document.createElement('tr');
             row.className = 'hover:bg-slate-50 transition-colors';
             row.innerHTML = `
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">${purchase.projectName}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">${purchase.creditsPurchased}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">₹${purchase.totalPaid.toFixed(2)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">₹${Number(purchase.totalPaid||0).toFixed(2)}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">${purchase.date}</td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                    <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">${purchase.status}</span>
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">${purchase.status || 'Completed'}</span>
                 </td>
             `;
             tbody.appendChild(row);
@@ -683,6 +695,21 @@
 
     function confirmPurchase() {
         // Mock purchase confirmation
+        const amount = parseInt(document.getElementById('creditAmount').value) || 0;
+        const price = selectedProject ? selectedProject.pricePerCredit : 0;
+        const total = amount * price;
+        const record = {
+            projectName: selectedProject ? selectedProject.name : 'Unknown Project',
+            creditsPurchased: amount,
+            totalPaid: total,
+            date: new Date().toISOString().slice(0,10),
+            status: 'Completed'
+        };
+        const stored = getStoredPurchases();
+        stored.unshift(record);
+        saveStoredPurchases(stored);
+        localStorage.setItem('purchaseJustMade', record.projectName);
+        populateRecentPurchases();
         alert('Purchase completed successfully! Your carbon credits have been added to your portfolio.');
         closePurchaseModal();
     }
