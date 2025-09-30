@@ -1,0 +1,179 @@
+/* Reusable neomorphic CTA button */
+.neo-btn {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	border-radius: 9999px; /* rounded-full */
+	padding-left: 2rem; /* px-8 */
+	padding-right: 2rem;
+	padding-top: 0.75rem; /* py-3 */
+	padding-bottom: 0.75rem;
+	background: rgba(255, 255, 255, 0.06);
+	color: rgba(255,255,255,0.95);
+	border: 0;
+	cursor: pointer;
+	user-select: none;
+	transition: box-shadow 350ms ease, filter 350ms ease;
+	box-shadow:
+		8px 8px 16px rgba(0, 0, 0, 0.20),
+		-8px -8px 16px rgba(255, 255, 255, 0.10),
+		inset 0 0 0 1px rgba(255,255,255,0.05);
+	outline: none;
+	/* trace defaults */
+	--neo-trace-size: 2px;
+	--neo-trace-speed: 2.2s;
+	--neo-trace-brightness: 1;
+	--neo-angle: 0deg;
+}
+
+/* Focus ring for accessibility */
+.neo-btn:focus-visible {
+	box-shadow:
+		0 0 0 3px rgba(34, 211, 238, 0.45),
+		8px 8px 16px rgba(0, 0, 0, 0.20),
+		-8px -8px 16px rgba(255, 255, 255, 0.10);
+}
+
+/* Hover lift and stronger shadow */
+.neo-btn:hover {
+	box-shadow:
+		12px 12px 28px rgba(0, 0, 0, 0.28),
+		-10px -10px 20px rgba(255, 255, 255, 0.12),
+		0 0 30px var(--neo-glow, rgba(34,211,238,0.35));
+	/* speed/brightness only */
+	--neo-trace-speed: 1.6s;
+	--neo-trace-brightness: 1.25;
+}
+
+/* Active press */
+.neo-btn:active { }
+
+/* Icon style */
+.neo-btn .neo-icon {
+	width: 1.125rem; /* ~18px */
+	height: 1.125rem;
+	flex: none;
+	transition: transform 300ms ease;
+}
+.neo-btn:hover .neo-icon {
+	transform: none;
+}
+
+/* Pulsating glow behind button */
+.neo-btn::before {
+	content: "";
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: 120%;
+	height: 160%;
+	border-radius: 9999px;
+	background: radial-gradient(60% 60% at 50% 50%, var(--neo-glow, rgba(34,211,238,0.35)) 0%, rgba(34,211,238,0) 60%);
+	filter: blur(18px);
+	opacity: 0.55;
+	z-index: -1;
+	transition: opacity 400ms ease, transform 450ms ease, filter 450ms ease;
+	animation: neo-pulse 2.8s ease-in-out infinite;
+}
+
+.neo-btn:hover::before {
+	opacity: 0.80;
+	filter: blur(22px);
+	transform: translate(-50%, -50%) scale(1.06);
+}
+
+@keyframes neo-pulse {
+	0% { opacity: 0.4; }
+	50% { opacity: 0.9; }
+	100% { opacity: 0.4; }
+}
+
+/* Optional small pulse dot on right side */
+.neo-btn .neo-dot {
+	position: relative;
+	width: 8px;
+	height: 8px;
+	border-radius: 9999px;
+	background: var(--neo-dot, rgba(34,211,238,0.85));
+	box-shadow: 0 0 14px var(--neo-dot, rgba(34,211,238,0.85));
+	margin-left: 0.25rem;
+}
+
+.neo-btn .neo-dot::after {
+	content: "";
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: 8px;
+	height: 8px;
+	border-radius: 9999px;
+	background: var(--neo-dot, rgba(34,211,238,0.85));
+	opacity: 0.55;
+	animation: neo-dot-ping 1.6s ease-out infinite;
+}
+
+@keyframes neo-dot-ping {
+	0% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+	100% { transform: translate(-50%, -50%) scale(2.4); opacity: 0; }
+}
+
+/* Color helpers via data attribute */
+button[data-glow="cyan"] { --neo-glow: rgba(34,211,238,0.35); --neo-dot: rgba(34,211,238,0.9); }
+button[data-glow="teal"] { --neo-glow: rgba(45,212,191,0.35); --neo-dot: rgba(45,212,191,0.9); }
+button[data-glow="violet"] { --neo-glow: rgba(167,139,250,0.35); --neo-dot: rgba(167,139,250,0.9); }
+button[data-glow="blue"] { --neo-glow: rgba(96,165,250,0.35); --neo-dot: rgba(96,165,250,0.9); }
+
+
+/* Animated scanning border: stays still, only gradient animates */
+@property --neo-angle {
+	syntax: '<angle>';
+	initial-value: 0deg;
+	inherits: false;
+}
+
+.neo-btn::after {
+	content: "";
+	position: absolute;
+	inset: calc(-1 * var(--neo-trace-size));
+	border-radius: inherit;
+	padding: var(--neo-trace-size);
+	pointer-events: none;
+	z-index: 0;
+	background: conic-gradient(from var(--neo-angle) at 50% 50%, var(--neo-trace-1, #22d3ee), var(--neo-trace-2, #3b82f6), var(--neo-trace-3, #2dd4bf), var(--neo-trace-1, #22d3ee));
+	filter: blur(4px) brightness(var(--neo-trace-brightness));
+	-webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+	-webkit-mask-composite: xor;
+	mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+	mask-composite: exclude;
+	animation: neo-trace-loop var(--neo-trace-speed) linear infinite;
+}
+
+@keyframes neo-trace-loop {
+	from { --neo-angle: 0deg; }
+	to { --neo-angle: 360deg; }
+}
+
+/* Themes for trace colors */
+button[data-glow="cyan"].neo-btn,
+button[data-glow="teal"].neo-btn {
+	--neo-trace-1: #22d3ee; /* cyan */
+	--neo-trace-2: #3b82f6; /* blue */
+	--neo-trace-3: #14b8a6; /* teal-500 */
+}
+
+button[data-glow="violet"].neo-btn,
+button[data-glow="blue"].neo-btn {
+	--neo-trace-1: #ec4899; /* pink-500 */
+	--neo-trace-2: #8b5cf6; /* violet-500 */
+	--neo-trace-3: #a855f7; /* purple/fuchsia blend */
+}
+
+/* Slight boost on light backgrounds */
+body:not(.dark) .neo-btn::after {
+	filter: blur(4px) brightness(calc(var(--neo-trace-brightness) * 1.08));
+}
+

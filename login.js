@@ -161,18 +161,16 @@ signupForm.addEventListener('submit', async function(e) {
 		// Success animation
 		container.classList.add('success');
 		
-		alert('Account created successfully! Welcome to BlueChain.');
-		
 		// Set user as logged in
 		localStorage.setItem('userLoggedIn', 'true');
 		
 		// Reset form
 		signupForm.reset();
 		
-		// Redirect to dashboard after successful signup
+		// Redirect to dashboard immediately after successful signup
 		setTimeout(() => {
 			window.location.href = 'dashboard.html';
-		}, 2000);
+		}, 1000);
 		
 	} catch (error) {
 		console.error('Signup error:', error);
@@ -225,18 +223,16 @@ signinForm.addEventListener('submit', async function(e) {
 		// Success animation
 		container.classList.add('success');
 		
-		alert('Login successful! Welcome back to BlueChain.');
-		
 		// Set user as logged in
 		localStorage.setItem('userLoggedIn', 'true');
 		
 		// Reset form
 		signinForm.reset();
 		
-		// Redirect to dashboard after successful login
+		// Redirect to dashboard immediately after successful login
 		setTimeout(() => {
 			window.location.href = 'dashboard.html';
-		}, 2000);
+		}, 1000);
 		
 	} catch (error) {
 		console.error('Login error:', error);

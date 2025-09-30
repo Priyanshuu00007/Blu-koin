@@ -8,6 +8,8 @@
         @import url(https://fonts.googleapis.com/css2?family=Lato&display=swap);
         @import url(https://fonts.googleapis.com/css2?family=Open+Sans&display=swap);
         @import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined);
+        /* Prevent initial flash before scripts initialize */
+        #webcrumbs { visibility: hidden; }
     </style>
 </head>
 <body>
@@ -326,7 +328,7 @@
                                                 <span class="material-symbols-outlined">water</span>
                                             </div>
                                             <div>
-                                                <p class="text-sm font-medium text-slate-800">Great Barrier Seagrass</p>
+                                                <p class="text-sm font-medium text-slate-800">Gulf of Mannar Seagrass</p>
                                                 <p class="text-xs text-slate-500">ID: BCRA-0893</p>
                                             </div>
                                         </div>
@@ -362,7 +364,7 @@
                                                 <span class="material-symbols-outlined">landscape</span>
                                             </div>
                                             <div>
-                                                <p class="text-sm font-medium text-slate-800">Florida Wetlands</p>
+                                                <p class="text-sm font-medium text-slate-800">Chilika Lake Wetlands</p>
                                                 <p class="text-xs text-slate-500">ID: BCRA-1278</p>
                                             </div>
                                         </div>
@@ -471,6 +473,10 @@
                 };
             });
         }, 1000);
+
+        // Reveal UI after initialization completes
+        const appRoot = document.getElementById('webcrumbs');
+        if (appRoot) appRoot.style.visibility = 'visible';
     });
 
     // Role switching functionality

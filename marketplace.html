@@ -8,6 +8,8 @@
         @import url(https://fonts.googleapis.com/css2?family=Lato&display=swap);
         @import url(https://fonts.googleapis.com/css2?family=Open+Sans&display=swap);
         @import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined);
+        /* Prevent initial flash before scripts initialize */
+        #webcrumbs { visibility: hidden; }
     </style>
 </head>
 <body>
@@ -47,6 +49,14 @@
                     <li><a href="#" class="flex items-center p-2 rounded-lg bg-[#ECFDF5] text-[#00C2A8] transition-all group">
                         <span class="material-symbols-outlined mr-3">shopping_cart</span>
                         <span>Marketplace</span>
+                    </a></li>
+                    <li><a href="app.html#/settings" class="flex items-center p-2 rounded-lg text-slate-800 hover:bg-slate-100 transition-all group">
+                        <span class="material-symbols-outlined mr-3 text-slate-600 group-hover:text-[#00C2A8]">settings</span>
+                        <span>Settings</span>
+                    </a></li>
+                    <li><a href="app.html#/support" class="flex items-center p-2 rounded-lg text-slate-800 hover:bg-slate-100 transition-all group">
+                        <span class="material-symbols-outlined mr-3 text-slate-600 group-hover:text-[#00C2A8]">help</span>
+                        <span>Support</span>
                     </a></li>
                 </ul>
             </nav>
@@ -108,10 +118,10 @@
                         </select>
                         <select class="px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00C2A8]/50 text-sm" id="priceFilter">
                             <option value="">All Prices</option>
-                            <option value="0-20">$0 - $20</option>
-                            <option value="20-50">$20 - $50</option>
-                            <option value="50-100">$50 - $100</option>
-                            <option value="100+">$100+</option>
+                            <option value="0-20">₹0 - ₹20</option>
+                            <option value="20-50">₹20 - ₹50</option>
+                            <option value="50-100">₹50 - ₹100</option>
+                            <option value="100+">₹100+</option>
                         </select>
                         <select class="px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00C2A8]/50 text-sm" id="statusFilter">
                             <option value="">All Status</option>
@@ -167,21 +177,21 @@
                     <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
                         <h3 class="text-lg font-semibold text-slate-800 mb-4">Average Price per Credit</h3>
                         <div class="text-center">
-                            <p class="text-4xl font-bold text-[#00C2A8] mb-2">$28.50</p>
+                            <p class="text-4xl font-bold text-[#00C2A8] mb-2">₹28.50</p>
                             <p class="text-sm text-slate-600">+5.2% from last month</p>
                         </div>
                         <div class="mt-6 space-y-3">
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-slate-600">Mangrove</span>
-                                <span class="text-sm font-medium text-slate-800">$25.00</span>
+                                <span class="text-sm font-medium text-slate-800">₹25.00</span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-slate-600">Seagrass</span>
-                                <span class="text-sm font-medium text-slate-800">$30.00</span>
+                                <span class="text-sm font-medium text-slate-800">₹30.00</span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-slate-600">Salt Marsh</span>
-                                <span class="text-sm font-medium text-slate-800">$28.00</span>
+                                <span class="text-sm font-medium text-slate-800">₹28.00</span>
                             </div>
                         </div>
                     </div>
@@ -288,8 +298,8 @@
                     <input type="number" id="creditAmount" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00C2A8]/50" placeholder="Enter number of credits" min="1">
                 </div>
                 <div class="p-4 bg-slate-50 rounded-lg">
-                    <p class="text-sm text-slate-600">Price per credit: <span id="creditPrice">$25.00</span></p>
-                    <p class="text-lg font-semibold text-slate-800 mt-2">Total: <span id="totalPrice">$0.00</span></p>
+                    <p class="text-sm text-slate-600">Price per credit: <span id="creditPrice">₹25.00</span></p>
+                    <p class="text-lg font-semibold text-slate-800 mt-2">Total: <span id="totalPrice">₹0.00</span></p>
                 </div>
                 <button onclick="nextStep()" class="w-full px-4 py-2 bg-[#00C2A8] text-white rounded-lg hover:bg-[#00A896] transition-colors">
                     Continue to Payment
@@ -336,7 +346,7 @@
                     <h4 class="font-semibold text-green-800 mb-2">Purchase Summary</h4>
                     <p class="text-sm text-green-700">Project: <span id="confirmProject">Sundarbans Mangrove</span></p>
                     <p class="text-sm text-green-700">Credits: <span id="confirmCredits">0</span></p>
-                    <p class="text-sm text-green-700">Total: <span id="confirmTotal">$0.00</span></p>
+                    <p class="text-sm text-green-700">Total: <span id="confirmTotal">₹0.00</span></p>
                 </div>
                 <div class="flex space-x-3">
                     <button onclick="prevStep()" class="flex-1 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors">
@@ -359,7 +369,7 @@
             id: 1,
             name: "Sundarbans Mangrove Restoration",
             ecosystem: "Mangrove",
-            location: "Bangladesh, Asia",
+            location: "West Bengal, India",
             availableCredits: 50000,
             pricePerCredit: 25.00,
             status: "Verified",
@@ -371,9 +381,9 @@
         },
         {
             id: 2,
-            name: "Great Barrier Seagrass",
+            name: "Gulf of Mannar Seagrass",
             ecosystem: "Seagrass",
-            location: "Australia, Oceania",
+            location: "Tamil Nadu, India",
             availableCredits: 30000,
             pricePerCredit: 30.00,
             status: "Verified",
@@ -387,7 +397,7 @@
             id: 3,
             name: "Florida Wetlands Conservation",
             ecosystem: "Wetland",
-            location: "Florida, USA",
+            location: "Odisha, India",
             availableCredits: 25000,
             pricePerCredit: 22.00,
             status: "Verified",
@@ -401,7 +411,7 @@
             id: 4,
             name: "Indonesian Peatland Protection",
             ecosystem: "Peatland",
-            location: "Indonesia, Asia",
+            location: "Andaman & Nicobar, India",
             availableCredits: 40000,
             pricePerCredit: 35.00,
             status: "Pending",
@@ -451,6 +461,10 @@
         populateProjectsGrid();
         populateRecentPurchases();
         setupEventListeners();
+
+        // Reveal UI after initialization completes
+        const appRoot = document.getElementById('webcrumbs');
+        if (appRoot) appRoot.style.visibility = 'visible';
     });
 
     function populateProjectsGrid() {
@@ -491,7 +505,7 @@
 
                 <div class="flex items-center justify-between mb-4">
                     <div>
-                        <p class="text-2xl font-bold text-slate-800">$${project.pricePerCredit.toFixed(2)}</p>
+                        <p class="text-2xl font-bold text-slate-800">₹${project.pricePerCredit.toFixed(2)}</p>
                         <p class="text-xs text-slate-500">per credit</p>
                     </div>
                 </div>
@@ -519,7 +533,7 @@
             row.innerHTML = `
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">${purchase.projectName}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">${purchase.creditsPurchased}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">$${purchase.totalPaid.toFixed(2)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">₹${purchase.totalPaid.toFixed(2)}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">${purchase.date}</td>
                 <td class="px-6 py-4 whitespace-nowrap">
                     <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">${purchase.status}</span>
@@ -580,7 +594,7 @@
                                     </div>
                                     <div class="flex justify-between">
                                         <span class="text-sm text-slate-600">Price per Credit</span>
-                                        <span class="text-sm font-medium text-slate-800">$${project.pricePerCredit.toFixed(2)}</span>
+                                        <span class="text-sm font-medium text-slate-800">₹${project.pricePerCredit.toFixed(2)}</span>
                                     </div>
                                     <div class="flex justify-between">
                                         <span class="text-sm text-slate-600">Verification Date</span>
@@ -630,7 +644,7 @@
     function purchaseCredits(projectId) {
         selectedProject = mockProjects.find(p => p.id === projectId);
         if (selectedProject) {
-            document.getElementById('creditPrice').textContent = `$${selectedProject.pricePerCredit.toFixed(2)}`;
+            document.getElementById('creditPrice').textContent = `₹${selectedProject.pricePerCredit.toFixed(2)}`;
             document.getElementById('confirmProject').textContent = selectedProject.name;
             currentStep = 1;
             showStep(1);
@@ -642,9 +656,9 @@
         const amount = parseInt(document.getElementById('creditAmount').value) || 0;
         const price = selectedProject ? selectedProject.pricePerCredit : 0;
         const total = amount * price;
-        document.getElementById('totalPrice').textContent = `$${total.toFixed(2)}`;
+        document.getElementById('totalPrice').textContent = `₹${total.toFixed(2)}`;
         document.getElementById('confirmCredits').textContent = amount;
-        document.getElementById('confirmTotal').textContent = `$${total.toFixed(2)}`;
+        document.getElementById('confirmTotal').textContent = `₹${total.toFixed(2)}`;
     }
 
     function nextStep() {

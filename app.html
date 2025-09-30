@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blue Carbon • App</title>
+  <!-- Tailwind CSS (Play CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a'
+            }
+          },
+          boxShadow: {
+            card: '0 1px 2px 0 rgb(0 0 0 / 0.05), 0 1px 3px 0 rgb(0 0 0 / 0.08)'
+          }
+        }
+      }
+    }
+  </script>
+  <!-- React + ReactDOM + Router + Babel -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-router-dom@6/umd/react-router-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script>
+    (function(){
+      function inject(src){ var s=document.createElement('script'); s.src=src; s.crossOrigin='anonymous'; document.head.appendChild(s); }
+      // Tailwind fallback
+      if (!window.tailwind) { inject('https://cdn.jsdelivr.net/npm/tailwindcss@3.4.10/lib/index.min.js'); }
+      // React fallbacks
+      setTimeout(function(){ if (!window.React) inject('https://cdn.jsdelivr.net/npm/react@18/umd/react.development.js'); }, 300);
+      setTimeout(function(){ if (!window.ReactDOM) inject('https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.development.js'); }, 350);
+      setTimeout(function(){ if (!window.ReactRouterDOM) inject('https://cdn.jsdelivr.net/npm/react-router-dom@6/umd/react-router-dom.development.js'); }, 400);
+      setTimeout(function(){ if (!window.Babel) inject('https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js'); }, 450);
+    })();
+  </script>
+  <style>
+    /* Basic scrollbar for consistency */
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 9999px; }
+    ::-webkit-scrollbar-track { background: #f8fafc; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <div id="root"></div>
+  <div id="fallback" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#334155;font-family:system-ui,Segoe UI,Roboto;">
+    <div>
+      <div style="text-align:center;font-weight:600;margin-bottom:8px;">Loading interface…</div>
+      <div style="font-size:12px;text-align:center;color:#64748b">If this stays, scripts failed to load.</div>
+    </div>
+  </div>
+  <script>
+    (function(){
+      function hideFallback(){ var el = document.getElementById('fallback'); if(el) el.style.display='none'; }
+      window.addEventListener('load', function(){ setTimeout(hideFallback, 1500); });
+      // Simple error overlay
+      window.addEventListener('error', function(e){
+        var overlay = document.getElementById('err-overlay');
+        if(!overlay){
+          overlay = document.createElement('div');
+          overlay.id = 'err-overlay';
+          overlay.style.position = 'fixed';
+          overlay.style.bottom = '0';
+          overlay.style.left = '0';
+          overlay.style.right = '0';
+          overlay.style.background = 'rgba(239,68,68,0.95)';
+          overlay.style.color = 'white';
+          overlay.style.fontFamily = 'ui-monospace, SFMono-Regular, Menlo, monospace';
+          overlay.style.fontSize = '12px';
+          overlay.style.maxHeight = '40vh';
+          overlay.style.overflow = 'auto';
+          overlay.style.zIndex = '99999';
+          overlay.style.padding = '12px 16px';
+          document.body.appendChild(overlay);
+        }
+        var pre = document.createElement('pre');
+        pre.textContent = (e.message || 'Error') + '\n' + (e.filename||'') + ':' + (e.lineno||'') + ':' + (e.colno||'');
+        overlay.appendChild(pre);
+      });
+      window.addEventListener('unhandledrejection', function(e){
+        var overlay = document.getElementById('err-overlay');
+        if(!overlay){
+          overlay = document.createElement('div');
+          overlay.id = 'err-overlay';
+          overlay.style.position = 'fixed';
+          overlay.style.bottom = '0';
+          overlay.style.left = '0';
+          overlay.style.right = '0';
+          overlay.style.background = 'rgba(239,68,68,0.95)';
+          overlay.style.color = 'white';
+          overlay.style.fontFamily = 'ui-monospace, SFMono-Regular, Menlo, monospace';
+          overlay.style.fontSize = '12px';
+          overlay.style.maxHeight = '40vh';
+          overlay.style.overflow = 'auto';
+          overlay.style.zIndex = '99999';
+          overlay.style.padding = '12px 16px';
+          document.body.appendChild(overlay);
+        }
+        var pre = document.createElement('pre');
+        pre.textContent = 'Unhandled rejection: ' + (e.reason && (e.reason.stack||e.reason.message||String(e.reason)));
+        overlay.appendChild(pre);
+      });
+    })();
+  </script>
+  <script type="text/babel" data-presets="react,env">
+    function __BC_START_APP__() {
+      const { useState, useMemo, useEffect, useRef } = React;
+      // Simple hash router utilities (no external dependency)
+      function useHashRoute() {
+        const [route, setRoute] = React.useState(window.location.hash.replace(/^#/, '') || '/settings');
+        React.useEffect(() => {
+          const onHash = () => setRoute(window.location.hash.replace(/^#/, '') || '/settings');
+          window.addEventListener('hashchange', onHash);
+          return () => window.removeEventListener('hashchange', onHash);
+        }, []);
+        return route;
+      }
+
+      function classNames(...classes) { return classes.filter(Boolean).join(' '); }
+
+      function Toast({ toasts, dismiss }) {
+        return (
+          <div className="fixed top-4 right-4 z-50 space-y-2">
+            {toasts.map((t) => (
+              <div key={t.id} className="rounded-md bg-white shadow-card border border-slate-200 px-4 py-3 flex items-start gap-3 min-w-[260px]">
+                <div className={classNames(
+                  'h-2 w-2 rounded-full mt-2',
+                  t.variant === 'success' ? 'bg-green-500' : t.variant === 'error' ? 'bg-red-500' : 'bg-slate-400'
+                )} />
+                <div className="flex-1">
+                  <p className="text-sm font-medium">{t.title}</p>
+                  {t.message && <p className="text-xs text-slate-600 mt-0.5">{t.message}</p>}
+                </div>
+                <button onClick={() => dismiss(t.id)} className="text-slate-500 hover:text-slate-700">✕</button>
+              </div>
+            ))}
+          </div>
+        );
+      }
+
+      function useToast() {
+        const [toasts, setToasts] = useState([]);
+        const dismiss = (id) => setToasts((ts) => ts.filter((t) => t.id !== id));
+        const push = (toast) => {
+          const id = Math.random().toString(36).slice(2);
+          const t = { id, variant: 'success', duration: 2500, ...toast };
+          setToasts((ts) => [...ts, t]);
+          setTimeout(() => dismiss(id), t.duration);
+        };
+        return { toasts, push, dismiss };
+      }
+
+      function Card({ title, subtitle, children, actions }) {
+        return (
+          <div className="bg-white rounded-xl border border-slate-200 shadow-card">
+            {(title || actions) && (
+              <div className="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
+                <div>
+                  {title && <h3 className="text-base font-semibold">{title}</h3>}
+                  {subtitle && <p className="text-sm text-slate-600 mt-0.5">{subtitle}</p>}
+                </div>
+                {actions}
+              </div>
+            )}
+            <div className="p-5">{children}</div>
+          </div>
+        );
+      }
+
+      function Toggle({ label, checked, onChange, description }) {
+        return (
+          <label className="flex items-start justify-between gap-4 py-2">
+            <div>
+              <p className="text-sm font-medium">{label}</p>
+              {description && <p className="text-xs text-slate-600">{description}</p>}
+            </div>
+            <button
+              type="button"
+              onClick={() => onChange(!checked)}
+              className={classNames(
+                'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none',
+                checked ? 'bg-primary-600' : 'bg-slate-200'
+              )}
+              role="switch"
+              aria-checked={checked}
+            >
+              <span
+                aria-hidden="true"
+                className={classNames(
+                  'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
+                  checked ? 'translate-x-5' : 'translate-x-0'
+                )}
+              />
+            </button>
+          </label>
+        );
+      }
+
+      function Modal({ open, title, description, confirmText = 'Confirm', cancelText = 'Cancel', onConfirm, onClose }) {
+        if (!open) return null;
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <div className="absolute inset-0 bg-slate-900/50" onClick={onClose} />
+            <div className="relative bg-white rounded-xl shadow-xl border border-slate-200 w-full max-w-md mx-4">
+              <div className="px-5 py-4 border-b border-slate-200">
+                <h3 className="text-base font-semibold">{title}</h3>
+                {description && <p className="text-sm text-slate-600 mt-1">{description}</p>}
+              </div>
+              <div className="p-5 flex gap-3 justify-end">
+                <button className="px-4 py-2 text-sm rounded-md border border-slate-200 hover:bg-slate-50" onClick={onClose}>{cancelText}</button>
+                <button className="px-4 py-2 text-sm rounded-md bg-red-600 text-white hover:bg-red-700" onClick={() => { onConfirm?.(); onClose(); }}>
+                  {confirmText}
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      function PageHeader({ title, subtitle }) {
+        return (
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
+            {subtitle && <p className="text-slate-600 mt-1">{subtitle}</p>}
+          </div>
+        );
+      }
+
+      // Settings Page Components
+      function ProfileCard({ onSaved, initial }) {
+        const [form, setForm] = useState(() => ({
+          fullName: initial?.fullName || 'Priya Sharma',
+          email: initial?.email || 'priya@example.com',
+          phone: initial?.phone || '+1 (555) 010-1000',
+          organization: initial?.organization || 'Blue Carbon Labs',
+          avatar: initial?.avatar || ''
+        }));
+        const [preview, setPreview] = useState('https://i.pravatar.cc/120?img=5');
+
+        const onFile = (e) => {
+          const file = e.target.files?.[0];
+          if (file) {
+            const url = URL.createObjectURL(file);
+            setPreview(url);
+            setForm({ ...form, avatar: file.name });
+          }
+        };
+
+        return (
+          <Card title="Profile" subtitle="Update your personal information and profile photo.">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div className="md:col-span-2 space-y-4">
+                <div>
+                  <label className="text-sm font-medium">Full Name</label>
+                  <input className="mt-1 w-full rounded-md border-slate-300 focus:border-primary-500 focus:ring-primary-500" value={form.fullName} onChange={(e)=>setForm({...form, fullName:e.target.value})} />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm font-medium">Email</label>
+                    <input type="email" className="mt-1 w-full rounded-md border-slate-300 focus:border-primary-500 focus:ring-primary-500" value={form.email} onChange={(e)=>setForm({...form, email:e.target.value})} />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Contact Number</label>
+                    <input className="mt-1 w-full rounded-md border-slate-300 focus:border-primary-500 focus:ring-primary-500" value={form.phone} onChange={(e)=>setForm({...form, phone:e.target.value})} />
+                  </div>
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Organization / Company Name</label>
+                  <input className="mt-1 w-full rounded-md border-slate-300 focus:border-primary-500 focus:ring-primary-500" value={form.organization} onChange={(e)=>setForm({...form, organization:e.target.value})} />
+                </div>
+                <div className="pt-2">
+                  <button onClick={()=>onSaved?.(form)} className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary-600 text-white hover:bg-primary-700">
+                    Save Changes
+                  </button>
+                </div>
+              </div>
+              <div className="md:col-span-1">
+                <div className="flex flex-col items-center gap-3">
+                  <img src={preview} alt="avatar" className="h-24 w-24 rounded-full object-cover border border-slate-200" />
+                  <label className="inline-flex items-center gap-2 px-3 py-2 rounded-md border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                    <input type="file" accept="image/*" className="hidden" onChange={onFile} />
+                    Change Photo
+                  </label>
+                  {form.avatar && <p className="text-xs text-slate-500">Selected: {form.avatar}</p>}
+                </div>
+              </div>
+            </div>
+          </Card>
+        );
+      }
+
+      function NotificationToggles({ value, onChange, onSaved }) {
+        const [state, setState] = useState(value || {
+          email: true,
+          projectStatus: true,
+          verification: true,
+          purchaseConfirmations: true,
+        });
+        useEffect(()=>{ onChange?.(state); }, [state]);
+        return (
+          <Card title="Notifications" subtitle="Choose what updates you want to receive.">
+            <div className="space-y-2">
+              <Toggle label="Email Notifications" checked={state.email} onChange={(v)=>setState({...state, email:v})} description="Receive important updates via email." />
+              <Toggle label="Project Status Alerts" checked={state.projectStatus} onChange={(v)=>setState({...state, projectStatus:v})} />
+              <Toggle label="Verification Updates" checked={state.verification} onChange={(v)=>setState({...state, verification:v})} />
+              <Toggle label="Purchase Confirmations" checked={state.purchaseConfirmations} onChange={(v)=>setState({...state, purchaseConfirmations:v})} />
+            </div>
+            <div className="pt-4">
+              <button onClick={()=>onSaved?.(state)} className="px-4 py-2 rounded-md bg-primary-600 text-white hover:bg-primary-700">Save Preferences</button>
+            </div>
+          </Card>
+        );
+      }
+
+      function SecurityCard({ onToast }) {
+        const [passwords, setPasswords] = useState({ current:'', next:'', confirm:'' });
+        const [twoFA, setTwoFA] = useState(false);
+        const [devices, setDevices] = useState([
+          { id: 'd1', name: 'Chrome • Windows', lastActive: 'Today, 10:22' },
+          { id: 'd2', name: 'Safari • iPhone', lastActive: 'Yesterday, 20:12' },
+        ]);
+        const changePassword = () => {
+          if (!passwords.current || !passwords.next || !passwords.confirm) {
+            onToast({ variant:'error', title:'All fields are required' });
+            return;
+          }
+          if (passwords.next.length < 8) {
+            onToast({ variant:'error', title:'New password must be at least 8 characters' });
+            return;
+          }
+          if (passwords.next !== passwords.confirm) {
+            onToast({ variant:'error', title:'New passwords do not match' });
+            return;
+          }
+          onToast({ variant:'success', title:'Password updated' });
+          setPasswords({ current:'', next:'', confirm:'' });
+        };
+        const removeDevice = (id) => {
+          setDevices((ds) => ds.filter((d)=>d.id!==id));
+          onToast({ variant:'success', title:'Device removed' });
+        };
+        return (
+          <Card title="Security" subtitle="Manage password, 2FA, and connected devices.">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div>
+                <h4 className="font-semibold mb-3">Change Password</h4>
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-sm font-medium">Current Password</label>
+                    <input type="password" className="mt-1 w-full rounded-md border-slate-300 focus:border-primary-500 focus:ring-primary-500" value={passwords.current} onChange={(e)=>setPasswords({...passwords, current:e.target.value})} />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">New Password</label>
+                    <input type="password" className="mt-1 w-full rounded-md border-slate-300 focus:border-primary-500 focus:ring-primary-500" value={passwords.next} onChange={(e)=>setPasswords({...passwords, next:e.target.value})} />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Confirm New Password</label>
+                    <input type="password" className="mt-1 w-full rounded-md border-slate-300 focus:border-primary-500 focus:ring-primary-500" value={passwords.confirm} onChange={(e)=>setPasswords({...passwords, confirm:e.target.value})} />
+                  </div>
+                  <button onClick={changePassword} className="px-4 py-2 rounded-md bg-primary-600 text-white hover:bg-primary-700">Update Password</button>
+                </div>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-3">Two-Factor Authentication</h4>
+                <Toggle label="Enable 2FA" checked={twoFA} onChange={(v)=>{ setTwoFA(v); onToast({ variant:'success', title: v ? '2FA enabled' : '2FA disabled' }); }} description="Adds an extra layer of security to your account." />
+                <h4 className="font-semibold mt-6 mb-3">Device Management</h4>
+                <ul className="divide-y divide-slate-200">
+                  {devices.map((d)=> (
+                    <li key={d.id} className="py-3 flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium">{d.name}</p>
+                        <p className="text-xs text-slate-600">Last active: {d.lastActive}</p>
+                      </div>
+                      <button onClick={()=>removeDevice(d.id)} className="text-sm text-red-600 hover:text-red-700">Remove</button>
+                    </li>
+                  ))}
+                  {devices.length === 0 && <li className="py-3 text-sm text-slate-600">No active devices.</li>}
+                </ul>
+              </div>
+            </div>
+          </Card>
+        );
+      }
+
+      function AccountActions({ onDeactivate, onDownload }) {
+        return (
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 bg-white border border-slate-200 rounded-xl">
+            <div>
+              <h4 className="font-semibold">Account Actions</h4>
+              <p className="text-sm text-slate-600">Dangerous or irreversible actions live here.</p>
+            </div>
+            <div className="flex gap-3">
+              <button onClick={onDownload} className="px-4 py-2 rounded-md border border-slate-200 hover:bg-slate-50">Download Account Data</button>
+              <button onClick={onDeactivate} className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700">Deactivate Account</button>
+            </div>
+          </div>
+        );
+      }
+
+      function SettingsPage({ toast }) {
+        const [notif, setNotif] = useState();
+        const [modalOpen, setModalOpen] = useState(false);
+
+        return (
+          <div className="space-y-6">
+            <PageHeader title="Settings" subtitle="Manage your account preferences and personalize your experience." />
+            <ProfileCard onSaved={() => toast.push({ title:'Profile saved', variant:'success' })} />
+            <NotificationToggles value={notif} onChange={setNotif} onSaved={() => toast.push({ title:'Notification preferences saved' })} />
+            <SecurityCard onToast={(t)=>toast.push(t)} />
+            <AccountActions onDeactivate={()=>setModalOpen(true)} onDownload={()=>toast.push({ title:'Export started', message:'We are preparing your data export.' })} />
+            <Modal open={modalOpen} onClose={()=>setModalOpen(false)} title="Deactivate account?" description="This will deactivate your account. You can reactivate by contacting support." confirmText="Deactivate" onConfirm={()=>toast.push({ variant:'success', title:'Account deactivation requested' })} />
+          </div>
+        );
+      }
+
+      // Support Page Components
+      function AccordionItem({ q, a, open, onToggle }) {
+        return (
+          <div className="border border-slate-200 rounded-lg overflow-hidden bg-white">
+            <button onClick={onToggle} className="w-full text-left px-4 py-3 flex items-center justify-between">
+              <span className="font-medium">{q}</span>
+              <span className="text-slate-500">{open ? '−' : '+'}</span>
+            </button>
+            <div className={classNames('px-4 grid transition-all duration-200 ease-in-out', open ? 'py-3 grid-rows-[1fr]' : 'py-0 grid-rows-[0fr]')}
+                 style={{borderTop: '1px solid rgb(226 232 240)'}}>
+              <div className="overflow-hidden text-sm text-slate-600">{a}</div>
+            </div>
+          </div>
+        );
+      }
+
+      function FAQAccordion() {
+        const [open, setOpen] = useState(null);
+        const faqs = [
+          { q: 'What is Blue Carbon Registry?', a: 'A platform to register, verify, and trade blue carbon credits with transparency.' },
+          { q: 'How do I verify a project?', a: 'Submit project documents, undergo third‑party verification, and track status on your dashboard.' },
+          { q: 'How do I purchase credits?', a: 'Browse the marketplace, choose a project, and complete a purchase with secure checkout.' },
+          { q: 'What are verification requirements?', a: 'Baseline data, monitoring plans, periodic validation, and evidence as per methodology.' },
+          { q: 'How do I reset my password?', a: 'Go to Settings → Security → Change Password, or contact support for assistance.' },
+          { q: 'Do you support enterprise SSO?', a: 'Yes, SAML and OIDC integrations can be arranged for enterprise customers.' },
+        ];
+        return (
+          <div className="space-y-3">
+            {faqs.map((f, i) => (
+              <AccordionItem key={i} q={f.q} a={f.a} open={open===i} onToggle={()=>setOpen(open===i?null:i)} />
+            ))}
+          </div>
+        );
+      }
+
+      function SupportForm({ onSubmit }) {
+        const [form, setForm] = useState({ name:'', email:'', subject:'', message:'' });
+        const submit = (e) => {
+          e.preventDefault();
+          if (!form.name || !form.email || !form.subject || !form.message) {
+            onSubmit?.({ ok:false, error:'All fields are required.' });
+            return;
+          }
+          onSubmit?.({ ok:true });
+          setForm({ name:'', email:'', subject:'', message:'' });
+        };
+        return (
+          <Card title="Contact Support" subtitle="Send us a message and we’ll get back to you.">
+            <form onSubmit={submit} className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium">Full Name</label>
+                  <input className="mt-1 w-full rounded-md border-slate-300 focus:border-primary-500 focus:ring-primary-500" value={form.name} onChange={(e)=>setForm({...form, name:e.target.value})} />
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Email</label>
+                  <input type="email" className="mt-1 w-full rounded-md border-slate-300 focus:border-primary-500 focus:ring-primary-500" value={form.email} onChange={(e)=>setForm({...form, email:e.target.value})} />
+                </div>
+              </div>
+              <div>
+                <label className="text-sm font-medium">Subject</label>
+                <input className="mt-1 w-full rounded-md border-slate-300 focus:border-primary-500 focus:ring-primary-500" value={form.subject} onChange={(e)=>setForm({...form, subject:e.target.value})} />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Message</label>
+                <textarea rows="4" className="mt-1 w-full rounded-md border-slate-300 focus:border-primary-500 focus:ring-primary-500" value={form.message} onChange={(e)=>setForm({...form, message:e.target.value})} />
+              </div>
+              <div>
+                <button type="submit" className="px-4 py-2 rounded-md bg-primary-600 text-white hover:bg-primary-700">Submit Ticket</button>
+              </div>
+            </form>
+          </Card>
+        );
+      }
+
+      function LiveChatWidget() {
+        const [open, setOpen] = useState(false);
+        return (
+          <>
+            <button onClick={()=>setOpen(true)} className="fixed bottom-5 right-5 z-40 rounded-full bg-primary-600 text-white h-12 w-12 shadow-lg hover:bg-primary-700">
+              💬
+            </button>
+            {open && (
+              <div className="fixed bottom-20 right-5 z-40 w-80 bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden">
+                <div className="px-4 py-3 border-b border-slate-200 flex items-center justify-between">
+                  <p className="font-medium">Live Chat</p>
+                  <button className="text-slate-500 hover:text-slate-700" onClick={()=>setOpen(false)}>✕</button>
+                </div>
+                <div className="p-4 text-sm text-slate-600">
+                  <p className="font-medium">Start a conversation</p>
+                  <p className="mt-1">Our team typically replies within a few minutes.</p>
+                  <button className="mt-3 w-full px-3 py-2 rounded-md bg-primary-600 text-white hover:bg-primary-700">New message</button>
+                </div>
+              </div>
+            )}
+          </>
+        );
+      }
+
+      function SupportPage({ toast }) {
+        function openMock(url) {
+          try { window.open(url, '_blank', 'noopener'); } catch (_) {}
+          toast.push({ title: 'Opening in new tab', message: url });
+        }
+        return (
+          <div className="space-y-6">
+            <PageHeader title="Support & Help Center" subtitle="We’re here to assist you. Explore FAQs or reach out to our support team." />
+            <FAQAccordion />
+            <SupportForm onSubmit={(res)=>{
+              if (res.ok) toast.push({ title:'Ticket submitted', message:'We will email you shortly.'});
+              else toast.push({ variant:'error', title:'Validation error', message: res.error});
+            }} />
+            <Card title="Additional Resources">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button onClick={() => openMock('https://example.com/docs')} className="px-4 py-2 rounded-md border border-slate-200 hover:bg-slate-50">Documentation</button>
+                <button onClick={() => openMock('https://example.com/community')} className="px-4 py-2 rounded-md border border-slate-200 hover:bg-slate-50">Community Forum</button>
+                <button onClick={() => openMock('mailto:support@example.com')} className="px-4 py-2 rounded-md border border-slate-200 hover:bg-slate-50">Email Support</button>
+              </div>
+            </Card>
+            <LiveChatWidget />
+          </div>
+        );
+      }
+
+      function TopNav({ route }) {
+        const link = 'px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100';
+        const active = 'text-slate-900 bg-slate-100';
+        return (
+          <div className="sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-slate-200">
+            <div className="max-w-6xl mx-auto px-4">
+              <div className="h-14 flex items-center justify-between">
+                <a href="#/settings" className="font-semibold text-primary-700">Blue Carbon</a>
+                <nav className="flex items-center gap-1">
+                  <a href="#/settings" className={classNames(link, route === '/settings' && active)}>Settings</a>
+                  <a href="#/support" className={classNames(link, route === '/support' && active)}>Support</a>
+                </nav>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      function Layout({ children }) {
+        return (
+          <div className="min-h-screen flex flex-col">
+            {children.topnav}
+            <main className="flex-1">
+              <div className="max-w-6xl mx-auto px-4 py-6">{children.content}</div>
+            </main>
+            <footer className="border-t border-slate-200 bg-white">
+              <div className="max-w-6xl mx-auto px-4 py-4 text-xs text-slate-500">© {new Date().getFullYear()} Blue Carbon</div>
+            </footer>
+          </div>
+        );
+      }
+
+      function App() {
+        const toast = useToast();
+        const route = useHashRoute();
+        const topnav = <TopNav route={route} />;
+        const page = route === '/support' ? <SupportPage toast={toast} /> : <SettingsPage toast={toast} />;
+        return (
+          <>
+            <Layout>{ { topnav, content: page } }</Layout>
+            <Toast toasts={toast.toasts} dismiss={toast.dismiss} />
+          </>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App />);
+      const fb = document.getElementById('fallback'); if (fb) fb.style.display='none';
+    }
+    window.__BC_START_APP__ = __BC_START_APP__;
+  </script>
+  <script>
+    (function waitAndStart(){
+      if (window.React && window.ReactDOM && window.ReactRouterDOM && window.__BC_START_APP__) {
+        try { window.__BC_START_APP__(); } catch (e) { console.error(e); }
+      } else {
+        setTimeout(waitAndStart, 100);
+      }
+    })();
+  </script>
+</body>
+</html>
+
+
