@@ -163,6 +163,13 @@ signupForm.addEventListener('submit', async function(e) {
 		
 		// Set user as logged in
 		localStorage.setItem('userLoggedIn', 'true');
+		// Persist basic profile info
+		if (fullName) {
+			localStorage.setItem('userName', fullName);
+		}
+		if (email) {
+			localStorage.setItem('userEmail', email);
+		}
 		
 		// Reset form
 		signupForm.reset();
@@ -225,6 +232,23 @@ signinForm.addEventListener('submit', async function(e) {
 		
 		// Set user as logged in
 		localStorage.setItem('userLoggedIn', 'true');
+		// Store email and derive display name if missing
+		if (email) {
+			localStorage.setItem('userEmail', email);
+			const existingName = localStorage.getItem('userName');
+			if (!existingName) {
+				const localPart = email.split('@')[0] || '';
+				const pretty = localPart
+					.replace(/[._-]+/g, ' ')
+					.split(' ')
+					.filter(Boolean)
+					.map(s => s.charAt(0).toUpperCase() + s.slice(1))
+					.join(' ');
+				if (pretty) {
+					localStorage.setItem('userName', pretty);
+				}
+			}
+		}
 		
 		// Reset form
 		signinForm.reset();
